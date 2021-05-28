@@ -1,7 +1,7 @@
-# Full Stack Express Application with JwT / Sessions / PassportJS local Startegy
+# Full Stack Express Application with JwT / Sessions / PassportJS local Startegy / GOOGLE OAUTH 2.0
 
 ## Summary
-Application implements a fullstack Express Application with DB (MongoDB), authorizatiomn (JwT, with cookie)
+Application implements a fullstack Express Application with DB (MongoDB), authorization (JwT, with cookie), and Google OAUTH 2.0
 
 ## Folder Structure - Express (Full-Stack)
 
