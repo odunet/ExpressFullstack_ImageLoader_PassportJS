@@ -22,6 +22,7 @@ exports.seedAdmin = async () => {
       firstName: 'Ayokunle',
       lastName: 'Odutayo',
       userName: 'odunet2000',
+      email: 'odunet2000@test.com',
       passwordHash: hash,
       isAdmin: true,
       base64ImageSrc: ' ',

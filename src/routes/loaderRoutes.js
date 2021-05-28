@@ -16,6 +16,7 @@ const upload = multer({ storage: multer.memoryStorage() });
 const authGeneral = require('../middleware/loaderRoute/authGeneral');
 const adminAuth = require('../middleware/loaderRoute/authAdmin');
 const formValidator = require('../middleware/loaderRoute/formValidator');
+const confirmToken = require('../middleware/loaderRoute/confirmToken');
 
 //Create schema
 const loader = require('../models/loader');
@@ -69,7 +70,8 @@ router.post(
   '/auth/register',
   upload.single('photo'),
   [
-    check('userName', 'Please enter a valid username').exists(),
+    check('userName', 'A valid username is required').exists(),
+    check('email', 'Please enter a valid Email').isEmail(),
     check('password', 'A valid password is required').exists(),
   ],
   loaderControllers.createNewData(loader)
@@ -81,8 +83,8 @@ router.post(
 router.post(
   '/login',
   [
-    check('userName', 'Please enter a valid username')
-      .exists()
+    check('email', 'Please enter a valid email')
+      .isEmail()
       .isLength({ min: 1 })
       .withMessage('Must be at least 1 chars long'),
     check('password', 'A valid password is required')
@@ -102,6 +104,29 @@ router.post(
 // @route   POST loader/auth/logout
 // @desc    Register user(user, admin) and redirect to homepage
 // @access  Public
-router.get('/auth/logout', authGeneral, loaderControllers.logoutUser(loader));
+router.get(
+  '/auth/logout',
+  confirmToken,
+  authGeneral,
+  loaderControllers.logoutUser(loader)
+);
+
+/**
+ * Google Authententication
+ * OATH2.0
+ */
+router.get(
+  '/auth/google',
+  passport.authenticate('google', { scope: ['profile', 'email'] })
+);
+
+router.get(
+  '/auth/google/callback',
+  passport.authenticate('google', {
+    failureRedirect: '/../../index',
+    session: false,
+  }),
+  loaderControllers.login()
+);
 
 module.exports = router;

@@ -5,6 +5,7 @@ const createData = async (collection, data) => {
     firstName: data.firstName,
     lastName: data.lastName,
     userName: data.userName,
+    email: data.email,
     passwordHash: data.passwordHash,
     isAdmin: data.isAdmin,
     base64ImageSrc: data.base64ImageSrc,

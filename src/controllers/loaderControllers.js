@@ -1,6 +1,8 @@
 const { findData, createData } = require('../models/loader/loaderMethod');
-const jwt = require('jsonwebtoken');
+// const jwt = require('jsonwebtoken');
+const { sign } = require('../services/jwtService');
 const bcrypt = require('bcryptjs');
+const { validationResult } = require('express-validator');
 require('dotenv').config();
 
 // @route   GET loader/ [Not Implemented]
@@ -80,28 +82,32 @@ const createNewData = (user) => async (req, res, next) => {
 // @desc    Auth user(student, tutor, admin) receives authenticate passport user and redirect to auth page
 // @access  Public
 const login = (User) => async (req, res, next) => {
+  let payload;
   //Populate payload and generate token, then redirect to user page
-  const payload = {
-    user: {
-      id: req.user._id,
-      isAdmin: req.user.isAdmin,
-    },
-  };
+  if (!req.user.googleId) {
+    payload = {
+      user: {
+        id: req.user._id,
+        isAdmin: req.user.isAdmin,
+      },
+    };
+  } else {
+    payload = {
+      user: {
+        googleId: req.user.googleId,
+        email: req.user.email,
+      },
+    };
+  }
 
-  jwt.sign(
-    payload,
-    process.env.SECRET,
-    {
-      expiresIn: 36000,
-    },
-    (err, token) => {
-      if (err) throw err;
+  let token = await sign(payload, process.env.SECRET, {
+    expiresIn: 36000,
+  });
 
-      req.session.token = token;
-      //Redirect to auth page
-      return res.status(200).redirect('/loader/auth/user');
-    }
-  );
+  req.session.token = token;
+
+  //Redirect to auth page
+  if (req.session.token) return res.status(200).redirect('/loader/auth/user');
 };
 
 // @route   GET loader/auth/logout
@@ -143,7 +149,7 @@ const getLoggedInUser = (User) => async (req, res, next) => {
       .select('-binaryImageSrc');
 
     if (req.user.isAdmin == true) {
-      return res.status(200).render('admin.hbs', {
+      return res.status(200).render('admin', {
         title: user.userName,
         time: user.createdAt,
         firstName: user.firstName,
@@ -151,7 +157,7 @@ const getLoggedInUser = (User) => async (req, res, next) => {
         image: user.base64ImageSrc,
       });
     } else {
-      return res.status(200).render('user.hbs', {
+      return res.status(200).render('user', {
         title: user.userName,
         time: user.createdAt,
         firstName: user.firstName,
@@ -160,9 +166,9 @@ const getLoggedInUser = (User) => async (req, res, next) => {
       });
     }
   } catch (error) {
-    req.errors = err.message;
+    req.errors = error.message;
     console.log(`Error is controller: ${req.errors}`);
-    next(err);
+    next(error);
   }
 };
 
@@ -188,7 +194,7 @@ const deleteUser = (User) => async (req, res, next) => {
 // @desc    Serves static register page
 // @access  Public
 const registerStatic = (req, res, next) => {
-  return res.render('register.hbs', { title: 'Register' });
+  return res.render('register', { title: 'Register' });
 };
 
 // @route   GET loader/login
@@ -197,12 +203,12 @@ const registerStatic = (req, res, next) => {
 const loginStatic = (req, res) => {
   if (res.locals.error.length != 0) {
     let passportError = res.locals.error;
-    return res.render('login.hbs', {
+    return res.render('login', {
       title: 'Login',
       passportError: passportError,
     });
   }
-  return res.render('login.hbs', { title: 'Login' });
+  return res.render('login', { title: 'Login' });
 };
 
 // @route   GET loader/index
@@ -211,7 +217,7 @@ const loginStatic = (req, res) => {
 const indexStatic = (req, res, next) => {
   if (res.locals.logoutMsg.length != 0) {
     let message = `User ${res.locals.logoutMsg} has been Loged Out`;
-    return res.render('index.hbs', { title: 'Home', message: message });
+    return res.render('index', { title: 'Home', message: message });
   }
 
   //Else
@@ -221,7 +227,10 @@ const indexStatic = (req, res, next) => {
       ? `User: ${req.query.dataIn} has been registered`
       : `User: ${req.query.dataOut} has been Loged Out`;
   }
-  return res.render('index.hbs', { title: 'Home', message: message });
+  return res.render('index', {
+    title: 'Home',
+    message: message,
+  });
 };
 
 module.exports = {

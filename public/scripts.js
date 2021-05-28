@@ -32,6 +32,7 @@ async function getUser(url) {
   try {
     let data = await fetch(url);
     let response = await data.json();
+    console.log(response);
     return response.data;
   } catch (err) {
     throw err;
@@ -50,6 +51,7 @@ if (document.getElementById('viewUser')) {
       loading.style.display = 'none';
       let ul = document.createElement('ul');
       ul.innerHTML = '';
+      console.log(data);
       if (data.length != 0) {
         for (let i = 0; i < data.length; i++) {
           let li = document.createElement('li');

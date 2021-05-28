@@ -1,75 +1,47 @@
-<!-- Note: Client available from Express Application: api/testCookieClient -->
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Image Loader | {{ title }}</title>
-    <link rel="shortcut icon" type="image/jpg" href="/favicon.ico"/>
-
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-
-    <!-- jQuery library -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
-    <!-- Popper JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-
-    <!-- Latest compiled JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
-
-    {{!-- Custom  --}}
-    <link rel="stylesheet" type="text/css" href="../style.css">
-    <script src="../scripts.js" defer></script>
-</head>
-<body>
-    <div class="container">
-        {{> header}}
-        <section class="card" id="landing">
-            <h2>
-                Welcome to the Express Image Loader
-            </h2>
-            <h3>
-                ver 1.1.0
-            </h3>
-            <form action="loader/../login" method="POST" class="showcase-form" id="form">
-                <ul>
-                {{#each passportError}}
-                <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                <li><strong>{{this}}</strong></li>
-                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
+<div class="container">
+    {{> header}}
+    <section class="card" id="landing">
+        <h2>
+            Welcome to the Express Image Loader
+        </h2>
+        <h3>
+            ver 1.1.0
+        </h3>
+        <form action="loader/../login" method="POST" class="showcase-form" id="form">
+            <ul>
+            {{#each passportError}}
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <li><strong>{{this}}</strong></li>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            {{/each}}
+            </ul>
+            <ul>
+            {{#each errors}}
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <li><strong>{{param}}</strong>: {{msg}} 
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </li>
+            </div>
+            {{/each}}
+            </ul>
+            <fieldset>
+                <legend>Login.</legend>
+                <div class="form-control">
+                    <input type="email" name="email" placeholder="Email" id="usr">
                 </div>
-                {{/each}}
-                </ul>
-                <ul>
-                {{#each errors}}
-                <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                <li><strong>{{param}}</strong>: {{msg}} 
-                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </li>
+                <div class="form-control">
+                    <input type="password" name="password" placeholder="Password" id="pwd">
                 </div>
-                {{/each}}
-                </ul>
-                <fieldset>
-                    <legend>Login.</legend>
-                    <div class="form-control">
-                        <input type="text" name="userName" placeholder="Username" id="usr">
-                    </div>
-                    <div class="form-control">
-                        <input type="password" name="password" placeholder="Password" id="pwd">
-                    </div>
-                    <input type="submit" name="submit" value="submit" class="btn" id="submitLogin">
-                </fieldset>
-            </form>
-        </section>
-    </div>
-</body>
-</html>
+                <input type="submit" name="submit" value="submit" class="btn" id="submitLogin">
+                <a href='loader/../auth/google' class="btn red darken-1">
+                    <i class="fab fa-google left" style="padding-right: 10px;"></i>Login with Google
+                </a>
+            </fieldset>
+        </form>
+    </section>
+</div>
