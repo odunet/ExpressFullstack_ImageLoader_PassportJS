@@ -107,7 +107,7 @@ const login = (User) => async (req, res, next) => {
   req.session.token = token;
 
   //Redirect to auth page
-  if (req.session.token) return res.status(200).redirect('/loader/auth/user');
+  return res.status(200).redirect('/loader/auth/user');
 };
 
 // @route   GET loader/auth/logout
