@@ -16,7 +16,7 @@ const upload = multer({ storage: multer.memoryStorage() });
 const authGeneral = require('../middleware/loaderRoute/authGeneral');
 const adminAuth = require('../middleware/loaderRoute/authAdmin');
 const formValidator = require('../middleware/loaderRoute/formValidator');
-// const confirmToken = require('../middleware/loaderRoute/confirmToken');
+const confirmToken = require('../middleware/loaderRoute/confirmToken');
 
 //Create schema
 const loader = require('../models/loader');
@@ -106,7 +106,7 @@ router.post(
 // @access  Public
 router.get(
   '/auth/logout',
-  // confirmToken,
+  confirmToken,
   authGeneral,
   loaderControllers.logoutUser(loader)
 );

@@ -1,5 +1,4 @@
 const { findData, createData } = require('../models/loader/loaderMethod');
-const jwt = require('jsonwebtoken');
 const { sign } = require('../services/jwtService');
 const bcrypt = require('bcryptjs');
 const { validationResult } = require('express-validator');
@@ -100,29 +99,14 @@ const login = (User) => async (req, res, next) => {
     };
   }
 
-  // let token = await sign(payload, process.env.SECRET, {
-  //   expiresIn: 36000,
-  // });
+  let token = await sign(payload, process.env.SECRET, {
+    expiresIn: 36000,
+  });
 
-  // req.session.token = token;
+  req.session.token = token;
 
-  // //Redirect to auth page
-  // return res.status(200).redirect('/loader/auth/user');
-
-  jwt.sign(
-    payload,
-    process.env.SECRET,
-    {
-      expiresIn: 36000,
-    },
-    (err, token) => {
-      if (err) throw err;
-
-      req.session.token = token;
-      //Redirect to auth page
-      return res.status(200).redirect('/loader/auth/user');
-    }
-  );
+  //Redirect to auth page
+  if (token) return res.status(200).redirect('/loader/auth/user');
 };
 
 // @route   GET loader/auth/logout

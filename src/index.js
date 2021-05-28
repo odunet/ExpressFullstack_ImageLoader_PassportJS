@@ -80,8 +80,8 @@ var sess = {
 //Check environement
 if (app.get('env') === 'production') {
   console.log('Production Environment');
-  app.set('trust proxy', 1); // trust first proxy
-  sess.cookie.secure = true; // serve secure cookies
+  // app.set('trust proxy', 1); // trust first proxy
+  // sess.cookie.secure = true; // serve secure cookies
 } else {
   console.log('Development Environment');
   app.use(morgan('dev'));

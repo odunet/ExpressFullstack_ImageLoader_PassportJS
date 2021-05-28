@@ -6,12 +6,9 @@ const loader = require('../../models/loader');
 module.exports = async (req, res, next) => {
   //Send in cookie
   let token;
-  token =
-    req.cookies['x-auth-token'] ||
-    req.header('x-auth-token') ||
-    (await req.session.token);
+  token = req.cookies['x-auth-token'] || req.header('x-auth-token');
 
-  // if (!token) token = (await req.session.token) || req.body.token;
+  if (!token) token = (await req.session.token) || req.body.token;
 
   // check if token does not exist
   if (!token)
