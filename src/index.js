@@ -122,6 +122,11 @@ app.set('views', viewPath);
 //Use routes
 app.use('/loader', loaderRoutes);
 
+//Redirect Landing Route
+app.use('/', (req, res) => {
+  res.status(200).redirect('loader/index');
+});
+
 //Error Handler 404
 app.use((req, res) => {
   res
