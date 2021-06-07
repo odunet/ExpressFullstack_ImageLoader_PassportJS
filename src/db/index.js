@@ -5,7 +5,7 @@ const { DATABASE_URI } = process.env;
 //Create connection (async)
 module.exports = async () => {
   try {
-    await mongoose.connect(DATABASE_URI, {
+    let connection = await mongoose.connect(DATABASE_URI, {
       useCreateIndex: true,
       useNewUrlParser: true,
       useUnifiedTopology: true,

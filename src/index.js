@@ -6,6 +6,7 @@ const cookieParser = require('cookie-parser');
 const MongoStore = require('connect-mongo');
 const passport = require('passport');
 const morgan = require('morgan');
+const mongoose = require('mongoose');
 
 //The direct use of ES6 methods are possible with the dependency 'ESM'
 import exphbs from 'express-handlebars';
@@ -15,24 +16,12 @@ import flash from 'connect-flash';
 
 //Get env variable
 require('dotenv').config();
-const { PORT } = process.env;
-const { NODE_ENV } = process.env;
 
 //Get routes
 const loaderRoutes = require('./routes/loaderRoutes');
 
-//Seeders
-const { seedAdmin } = require('./seeders/admin');
-seedAdmin();
-
 //initialize express
 const app = express();
-
-//Connect to DB
-connectDB();
-
-// Define router
-let router = express.Router();
 
 //Use cors
 const corsConfig = {
@@ -62,11 +51,43 @@ app.use(cors(corsConfig));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+//Declare session
+let sessionStore;
+
+//Check environement
+if (app.get('env') === 'production') {
+  console.log('Production Environment');
+
+  //Connect to DB
+  connectDB();
+
+  //Initialize session store
+  sessionStore = MongoStore.create({
+    mongoUrl: process.env.DATABASE_URI,
+    ttl: 14 * 24 * 60 * 60,
+  });
+  // app.set('trust proxy', 1); // trust first proxy
+  // sess.cookie.secure = true; // serve secure cookies
+} else if (app.get('env') === 'development') {
+  console.log('Development Environment');
+
+  //Connect to DB
+  connectDB();
+
+  //Initialize session store
+  sessionStore = MongoStore.create({
+    mongoUrl: process.env.DATABASE_URI,
+    ttl: 14 * 24 * 60 * 60,
+  });
+
+  app.use(morgan('dev'));
+} else if (app.get('env') === 'test') {
+  console.log('Test Environment');
+
+  sessionStore = null;
+}
+
 //initialize session
-const sessionStore = MongoStore.create({
-  mongoUrl: process.env.DATABASE_URI,
-  ttl: 14 * 24 * 60 * 60,
-});
 var sess = {
   secret: process.env.SECRET,
   resave: false,
@@ -77,15 +98,6 @@ var sess = {
   },
 };
 
-//Check environement
-if (app.get('env') === 'production') {
-  console.log('Production Environment');
-  // app.set('trust proxy', 1); // trust first proxy
-  // sess.cookie.secure = true; // serve secure cookies
-} else {
-  console.log('Development Environment');
-  app.use(morgan('dev'));
-}
 app.use(session(sess));
 
 // PASSPORT //
@@ -145,6 +157,4 @@ app.use(function (error, req, res, next) {
   }
 });
 
-app.listen(PORT, () => {
-  `Listening on ${PORT} in ${NODE_ENV} environment.`;
-});
+module.exports = app;

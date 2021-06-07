@@ -82,6 +82,7 @@ router.post(
 // @access  Public
 router.post(
   '/login',
+  upload.single('photo'),
   [
     check('email', 'Please enter a valid email')
       .isEmail()

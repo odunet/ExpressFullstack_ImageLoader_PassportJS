@@ -67,11 +67,14 @@ const createNewData = (user) => async (req, res, next) => {
 
     let response = await createData(user, req.body);
     // Redirect to index page
-    return res
-      .status(200)
-      .redirect('/loader/index?dataIn=' + req.body.userName);
+    return (
+      res
+        .status(200)
+        // .json({ message: 'New Member Registered' });
+        .redirect('/loader/index?dataIn=' + req.body.userName)
+    );
   } catch (e) {
-    req.errors = err.message;
+    req.errors = e.message;
     console.log(`Error is controller: ${req.errors}`);
     next(err);
   }

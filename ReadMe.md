@@ -1,7 +1,7 @@
 # Full Stack Express Application with JwT / Sessions / PassportJS local Startegy / GOOGLE OAUTH 2.0
 
 ## Summary
-Application implements a fullstack Express Application with DB (MongoDB), authorization (JwT, with cookie), and Google OAUTH 2.0
+Application implements a fullstack Express Application with DB (MongoDB), authorization (JwT, with cookie), JEST, and Google OAUTH 2.0
 
 ## Folder Structure - Express (Full-Stack)
 
@@ -56,6 +56,19 @@ Application implements a fullstack Express Application with DB (MongoDB), author
       │  └─ header.hbs
       ├─ register.hbs
       └─ user.hbs
+```
+
+## Application Setup
+* Entry into the server with provisions to handle ES-6 modules in NodeJS app.js
+* Entry into the server with only provisions for CommonJS in NodeJS app_cjs.js
+* Bear bone express application, this is available for use in testing framwork e.g. JEST index.js
+* 
+```
+# Run application
+npm run dev
+
+# Run test
+npm run test:jest
 ```
 
 ## Mockup of Complete Application
