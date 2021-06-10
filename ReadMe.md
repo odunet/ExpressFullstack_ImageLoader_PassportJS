@@ -3,6 +3,12 @@
 ## Summary
 Application implements a fullstack Express Application with DB (MongoDB), authorization (JwT, with cookie), JEST, and Google OAUTH 2.0
 
+## Key Features
+* CSRF Protection using Token
+* Authentication Using Passport JS (Local Strategy and Google OAUTH 2.0)
+* Unit Test with JEST, Super Test and Mongo-Memory-DB
+* Authorization with JwT and Session Cookie
+
 ## Folder Structure - Express (Full-Stack)
 
 ```

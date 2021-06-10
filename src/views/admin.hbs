@@ -30,6 +30,7 @@
         </div>
         {{!-- Show or unshow users  --}}
         <button class="btn" id="viewUser" value="viewUser">View All Users</button>
+        <input type="hidden" id='csrf' name="_csrf" value={{ csrfToken }}>
         <img src="/image/winter.gif" id="loading" style="display: none;">
         <div id="userList" class="card" style="display: none;"></div>
         <form action="loader/../logout" method="GET">

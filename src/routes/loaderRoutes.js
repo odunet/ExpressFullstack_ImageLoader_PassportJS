@@ -6,6 +6,11 @@ const path = require('path');
 const fs = require('fs');
 const multer = require('multer');
 
+var csrf = require('csurf');
+
+//Initialize csrf
+let csrfProtection = csrf();
+
 //import passport
 const passport = require('passport');
 
@@ -32,13 +37,14 @@ router.get('/index', loaderControllers.indexStatic);
 // @route   GET loader/login
 // @desc    Serves static login page
 // @access  Public
-router.get('/login', loaderControllers.loginStatic);
+router.get('/login', csrfProtection, loaderControllers.loginStatic);
 
 // @route   GET loader/auth/user
 // @desc    Serves static user profile page
 // @access  Public
 router.get(
   '/auth/user',
+  csrfProtection,
   authGeneral,
   loaderControllers.getLoggedInUser(loader)
 );
@@ -46,13 +52,14 @@ router.get(
 // @route   GET loader/register
 // @desc    Serves static register page
 // @access  Public
-router.get('/register', loaderControllers.registerStatic);
+router.get('/register', csrfProtection, loaderControllers.registerStatic);
 
 // @route   POST loader/auth/deleteuser
 // @desc    Delete a user who's userName is passed
 // @access  Public
 router.post(
   '/auth/deleteUser',
+  csrfProtection,
   [check('userName', 'Username not valid').exists()],
   adminAuth,
   loaderControllers.deleteUser(loader)
@@ -69,6 +76,7 @@ router.get('/auth/userList', adminAuth, loaderControllers.checkData(loader));
 router.post(
   '/auth/register',
   upload.single('photo'),
+  csrfProtection,
   [
     check('userName', 'A valid username is required').exists(),
     check('email', 'Please enter a valid Email').isEmail(),
@@ -82,6 +90,7 @@ router.post(
 // @access  Public
 router.post(
   '/login',
+  csrfProtection,
   upload.single('photo'),
   [
     check('email', 'Please enter a valid email')

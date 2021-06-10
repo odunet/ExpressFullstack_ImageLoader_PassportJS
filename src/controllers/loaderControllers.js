@@ -157,6 +157,7 @@ const getLoggedInUser = (User) => async (req, res, next) => {
         firstName: user.firstName,
         lastName: user.lastName,
         image: user.base64ImageSrc,
+        csrfToken: req.csrfToken(),
       });
     } else {
       return res.status(200).render('user', {
@@ -196,7 +197,10 @@ const deleteUser = (User) => async (req, res, next) => {
 // @desc    Serves static register page
 // @access  Public
 const registerStatic = (req, res, next) => {
-  return res.render('register', { title: 'Register' });
+  return res.render('register', {
+    title: 'Register',
+    csrfToken: req.csrfToken(),
+  });
 };
 
 // @route   GET loader/login
@@ -210,7 +214,10 @@ const loginStatic = (req, res) => {
       passportError: passportError,
     });
   }
-  return res.render('login', { title: 'Login' });
+  return res.render('login', {
+    title: 'Login',
+    csrfToken: req.csrfToken(),
+  });
 };
 
 // @route   GET loader/index

@@ -42,6 +42,7 @@ if (document.getElementById('viewUser')) {
   let viewUser = document.getElementById('viewUser');
   let loading = document.getElementById('loading');
   let userList = document.getElementById('userList');
+  let csrf = document.getElementById('csrf');
   viewUser.addEventListener('click', async () => {
     try {
       loading.style.display = '';
@@ -70,7 +71,10 @@ if (document.getElementById('viewUser')) {
                 `${window.location.origin}/loader/auth/deleteUser`,
                 {
                   method: 'POST',
-                  body: JSON.stringify({ userName: data[i].userName }),
+                  body: JSON.stringify({
+                    userName: data[i].userName,
+                    _csrf: csrf.value,
+                  }),
                   headers: {
                     'Content-Type': 'application/json',
                   },
@@ -99,6 +103,7 @@ if (document.getElementById('viewUser')) {
 if (document.getElementById('submitLogin')) {
   let usr = document.getElementById('usr');
   let pwd = document.getElementById('pwd');
+  let csrf = document.getElementById('csrf');
   let submitLogin = document.getElementById('submitLogin');
   submitLogin.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -108,6 +113,7 @@ if (document.getElementById('submitLogin')) {
         body: JSON.stringify({
           userName: usr.value,
           password: pwd.value,
+          _csrf: csrf.value,
         }),
         headers: {
           'Content-Type': 'application/json',

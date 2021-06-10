@@ -88,14 +88,11 @@ describe('testing-server-routes', () => {
 
   it('POST /login -success', async () => {
     try {
-      const filePath = `${__dirname}/../image/kanban.png`;
-
       const data = await request(app)
         .post('/loader/login') //uses the request function that calls on express app instance
         .set('Content-Type', 'multipart/form-data')
         .field('email', 'odunet@odunet.com')
-        .field('password', 'starman')
-        .attach('photo', filePath);
+        .field('password', 'starman');
 
       console.log(`Login Route: ${data.headers.location}`);
       expect(data.headers.location).toMatch(/loader\/auth\/user/);

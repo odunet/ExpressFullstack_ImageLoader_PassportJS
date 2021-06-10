@@ -80,7 +80,7 @@ if (app.get('env') === 'production') {
     ttl: 14 * 24 * 60 * 60,
   });
 
-  app.use(morgan('dev'));
+  // app.use(morgan('dev'));
 } else if (app.get('env') === 'test') {
   console.log('Test Environment');
 
