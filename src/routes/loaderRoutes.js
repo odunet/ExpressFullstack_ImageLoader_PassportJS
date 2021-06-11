@@ -91,7 +91,6 @@ router.post(
 router.post(
   '/login',
   csrfProtection,
-  upload.single('photo'),
   [
     check('email', 'Please enter a valid email')
       .isEmail()
